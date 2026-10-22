@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jen Sammons — UGC Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #17171B;
+    --paper: #F7F5F0;
+    --coral: #FF5C7A;
+    --amber: #F2B705;
+    --graphite: #1B1B1F;
+    --line: rgba(23,23,27,0.12);
+    --paper-line: rgba(247,245,240,0.16);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    padding-top: 78px;
+  }
+
+  h1, h2, h3 { font-family: 'Archivo Black', sans-serif; text-transform: uppercase; line-height: 0.95; }
+
+  .mono { font-family: 'Space Mono', monospace; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 5vw;
+    background: rgba(247,245,240,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .logo { font-family: 'Archivo Black', sans-serif; font-size: 18px; letter-spacing: -0.5px; }
+  .nav-links { display: flex; gap: 32px; font-size: 14px; font-weight: 600; }
+  .nav-links a { position: relative; padding-bottom: 2px; }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+    background: var(--coral); transition: width 0.25s ease;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: var(--ink); color: var(--paper); padding: 10px 18px;
+    border-radius: 100px; font-size: 13px; font-weight: 700;
+  }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 70px 5vw 60px; gap: 6vw;
+    position: relative;
+  }
+  .hero-text { flex: 1; min-width: 280px; }
+  .eyebrow {
+    font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--coral); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--coral); border-radius: 50%; display: inline-block; animation: pulse 1.8s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .hero h1 { font-size: clamp(42px, 7vw, 92px); letter-spacing: -1px; }
+  .hero h1 span { color: var(--coral); }
+  .hero p { font-size: 18px; max-width: 440px; margin-top: 24px; line-height: 1.55; color: #45454c; }
+
+  .hero-stats { display: flex; gap: 36px; margin-top: 40px; flex-wrap: wrap; }
+  .stat-num { font-family: 'Archivo Black', sans-serif; font-size: 30px; }
+  .stat-label { font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #77777f; margin-top: 2px; }
+
+  .hero-buttons { display: flex; gap: 14px; margin-top: 40px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--coral); color: var(--paper); padding: 15px 28px;
+    border-radius: 100px; font-weight: 700; font-size: 14px;
+    display: inline-block; transition: transform 0.2s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-secondary {
+    border: 1.5px solid var(--ink); padding: 14px 26px; border-radius: 100px;
+    font-weight: 700; font-size: 14px; transition: background 0.2s ease;
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--paper); }
+
+  /* Phone mockup */
+  .hero-phone {
+    flex: 0 0 auto; width: 260px; height: 530px; border-radius: 38px;
+    background: var(--graphite); padding: 12px; position: relative;
+    box-shadow: 0 40px 70px -20px rgba(0,0,0,0.35);
+    transform: rotate(3deg);
+    transition: transform 0.5s cubic-bezier(.2,.8,.2,1), box-shadow 0.5s ease;
+    cursor: pointer; z-index: 5;
+  }
+  .hero-phone.active {
+    transform: rotate(0deg) scale(1.32);
+    box-shadow: 0 60px 100px -20px rgba(0,0,0,0.5);
+    z-index: 20;
+  }
+  .hero-phone::before {
+    content: ''; position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+    width: 70px; height: 18px; background: var(--graphite); border-radius: 20px; z-index: 2;
+  }
+  .phone-screen {
+    width: 100%; height: 100%; border-radius: 28px; overflow: hidden; position: relative;
+    background: url('images/headshot.png') center/cover no-repeat;
+  }
+  .phone-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transition: opacity 0.3s ease; background: #0c0c0e;
+  }
+  .hero-phone.active .phone-video { opacity: 1; }
+  .hero-phone.active .phone-gradient-ui { opacity: 0; pointer-events: none; }
+  .phone-gradient-ui { transition: opacity 0.25s ease; }
+  .phone-play-btn {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 56px; height: 56px; border-radius: 50%; background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;
+    transition: opacity 0.25s ease; z-index: 3; pointer-events: none;
+  }
+  .hero-phone.active .phone-play-btn { opacity: 0; }
+  .phone-ui-bar {
+    position: absolute; bottom: 16px; left: 0; right: 0; padding: 0 16px;
+    display: flex; flex-direction: column; gap: 6px; color: white;
+  }
+  .phone-tag { font-family: 'Space Mono', monospace; font-size: 11px; opacity: 0.9; }
+  .phone-caption { font-size: 13px; font-weight: 600; }
+  .phone-like {
+    position: absolute; right: 14px; bottom: 90px; display: flex; flex-direction: column;
+    align-items: center; gap: 4px; color: white; font-size: 11px; font-weight: 700;
+  }
+  .heart { font-size: 22px; }
+
+  /* ---------- MARQUEE ---------- */
+  .marquee-wrap { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 26px 0; overflow: hidden; background: var(--ink); }
+  .marquee { display: flex; align-items: center; gap: 64px; width: max-content; animation: scroll 30s linear infinite; }
+  .marquee img {
+    height: 34px; width: auto; flex: 0 0 auto;
+    transition: transform 0.25s cubic-bezier(.2,.8,.2,1);
+    cursor: pointer;
+  }
+  .marquee img:hover { transform: scale(1.4); }
+  .marquee img.logo-lg { height: 56px; }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ---------- REEL / WORK SECTION ---------- */
+  .section { padding: 110px 5vw; }
+  .section-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 44px; flex-wrap: wrap; gap: 20px; }
+  .section-head h2 { font-size: clamp(32px, 5vw, 54px); }
+
+  .reel-wrap { position: relative; }
+  .reel {
+    display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .reel::-webkit-scrollbar { display: none; }
+
+  .reel-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px; border-radius: 50%; border: none;
+    background: var(--ink); color: var(--paper); font-size: 20px;
+    cursor: pointer; z-index: 5; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18); transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .reel-arrow:hover { transform: translateY(-50%) scale(1.08); background: var(--coral); }
+  .reel-arrow.prev { left: -8px; }
+  .reel-arrow.next { right: -8px; }
+  @media (max-width: 720px) {
+    .reel-arrow { width: 40px; height: 40px; }
+    .reel-arrow.prev { left: 4px; }
+    .reel-arrow.next { right: 4px; }
+  }
+
+  .reel-card {
+    flex: 0 0 200px; height: 356px; border-radius: 20px; position: relative;
+    scroll-snap-align: start; overflow: hidden; transition: transform 0.3s ease;
+    background: #0c0c0e;
+  }
+  .reel-card:hover { transform: translateY(-8px); }
+  .reel-card video, .reel-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .reel-tag-badge {
+    position: absolute; top: 12px; left: 12px; z-index: 2; pointer-events: none;
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    color: white; background: rgba(0,0,0,0.55); padding: 5px 11px; border-radius: 100px;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about { background: var(--ink); color: var(--paper); }
+  .about-grid { display: flex; gap: 6vw; flex-wrap: wrap; }
+  .about-text { flex: 1; min-width: 300px; }
+  .about-text h2 { color: var(--paper); }
+  .about-text p { font-size: 17px; line-height: 1.7; color: rgba(247,245,240,0.75); margin-top: 20px; max-width: 520px; }
+  .about-list { flex: 1; min-width: 280px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px; }
+  .about-item {
+    display: flex; justify-content: space-between; padding: 18px 0;
+    border-bottom: 1px solid var(--paper-line); font-family: 'Space Mono', monospace; font-size: 14px;
+  }
+  .about-item span:last-child { color: var(--amber); }
+  .about-stat { padding: 22px 0; }
+  .about-stat .stat-num { font-size: 42px; color: var(--paper); }
+  .about-stat .stat-label { color: var(--amber); opacity: 0.85; }
+  .about-video { flex: 0 0 auto; width: 340px; position: relative; transition: transform 0.3s ease; }
+  .about-video:hover { transform: translateY(-8px); }
+  .about-video video, .about-video img {
+    width: 100%; height: 610px; object-fit: cover; border-radius: 22px; display: block; background: #0c0c0e;
+    box-shadow: 0 20px 50px -12px rgba(0,0,0,0.55);
+  }
+  @media (max-width: 900px) {
+    .about-video { width: 100%; max-width: 360px; margin: 0 auto; }
+    .about-video video, .about-video img { height: 500px; }
+  }
+
+  /* ---------- BRANDS ---------- */
+  .brands { text-align: center; overflow: hidden; padding-top: 50px; }
+  .brands-grid-img { margin-top: 40px; width: 100%; max-width: 1400px; margin-left: auto; margin-right: auto; display: block; border-radius: 16px; }
+
+  /* ---------- CONTACT ---------- */
+  .contact { background: var(--coral); color: var(--paper); position: relative; overflow: hidden; }
+  .contact h2 { color: var(--paper); font-size: clamp(34px,6vw,64px); max-width: 700px; }
+  .contact p.sub { margin-top: 16px; font-size: 17px; opacity: 0.9; max-width: 480px; }
+  .contact-grid { display: flex; gap: 6vw; flex-wrap: wrap; margin-top: 44px; }
+  .contact-left { flex: 1; min-width: 300px; }
+  .contact-right { flex: 0 0 auto; min-width: 260px; display: flex; flex-direction: column; justify-content: flex-start; padding-top: 4px; }
+  .contact-right-label { font-family: 'Space Mono', monospace; font-size: 16px; font-weight: 700; opacity: 1; margin-bottom: 12px; }
+  .contact-email-link {
+    font-family: 'Archivo Black', sans-serif; font-size: clamp(20px, 2.4vw, 28px);
+    text-transform: none; border-bottom: 2px solid var(--paper); padding-bottom: 4px;
+    display: inline-block; width: fit-content; transition: opacity 0.2s ease;
+  }
+  .contact-email-link:hover { opacity: 0.75; }
+  form { margin-top: 44px; display: flex; flex-direction: column; gap: 18px; max-width: 520px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  label { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 1; }
+  input, textarea {
+    background: rgba(247,245,240,0.12); border: 1.5px solid rgba(247,245,240,0.4);
+    border-radius: 12px; padding: 14px 16px; color: var(--paper); font-family: 'Inter', sans-serif; font-size: 15px;
+  }
+  input::placeholder, textarea::placeholder { color: rgba(247,245,240,0.5); }
+  input:focus, textarea:focus, button:focus, a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  textarea { resize: vertical; min-height: 100px; }
+  .submit-btn {
+    background: var(--ink); color: var(--paper); padding: 16px 28px; border-radius: 100px;
+    font-weight: 700; font-size: 14px; border: none; cursor: pointer; width: fit-content;
+    display: flex; align-items: center; gap: 8px; transition: transform 0.2s ease;
+  }
+  .submit-btn:hover { transform: translateY(-2px); }
+  .form-note { font-size: 15px; opacity: 1; margin-top: 4px; font-weight: 600; }
+
+  footer {
+    padding: 30px 5vw; display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Space Mono', monospace; font-size: 12px; color: #77777f; flex-wrap: wrap; gap: 10px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+
+  @media (max-width: 720px) {
+    .hero { flex-direction: column-reverse; padding-top: 60px; }
+    .hero-phone { transform: none; width: 220px; height: 460px; }
+    .section { padding: 70px 5vw; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">JEN SAMMONS</div>
+  <a href="#contact" class="nav-cta">Let&#x27;s talk</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>Ads from a nurse<br>people <span>actually</span><br>trust.</h1>
+    <div class="hero-buttons">
+      <a href="#about" class="btn-primary">See why it works ↓</a>
+      <a href="#contact" class="btn-secondary">Work with me</a>
+    </div>
+  </div>
+  <div class="hero-phone" id="heroPhone">
+    <div class="phone-screen">
+      <video class="phone-video" id="phoneVideo" loop playsinline preload="none" poster="videos/posters/intro.jpg" src="videos/intro.mp4"></video>
+      <div class="phone-play-btn" id="phonePlayBtn">▶</div>
+      <div class="phone-gradient-ui">
+        
+        <div class="phone-ui-bar">
+          <div class="phone-caption">&quot;What&#x27;s up? My name&#x27;s Jen.&quot;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-wrap" id="marquee">
+  <div class="marquee">
+    <img src="images/marquee/sitetobuy.svg" alt="SiteToBuy"><img src="images/marquee/lullabites.svg" alt="LullaBites"><img src="images/marquee/runna.svg" alt="Runna"><img src="images/marquee/helo.svg" alt="HELO"><img src="images/marquee/kalshi.svg" alt="Kalshi">
+    <img src="images/marquee/sitetobuy.svg" alt="SiteToBuy"><img src="images/marquee/lullabites.svg" alt="LullaBites"><img src="images/marquee/runna.svg" alt="Runna"><img src="images/marquee/helo.svg" alt="HELO"><img src="images/marquee/kalshi.svg" alt="Kalshi">
+  </div>
+</div>
+
+<section class="section" id="work">
+  <div class="section-head">
+    <h2>Past Work</h2>
+  </div>
+  <div class="reel-wrap">
+    <button class="reel-arrow prev" id="reelPrev" aria-label="Previous video">‹</button>
+    <div class="reel" id="reel"></div>
+    <button class="reel-arrow next" id="reelNext" aria-label="Next video">›</button>
+  </div>
+</section>
+
+<section class="section about" id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <h2>I'm a 22-year-old registered nurse<br>and UGC creator from Central Utah.<br>I make ads that feel real,<br>not scripted.</h2>
+      <p>Product reviews, testimonials and conversational ads for lifestyle, wellness and healthcare brands. As a nurse I know how much credibility and clear communication matter, and I bring both to every ad. Specialties: lifestyle and healthcare products, health and fitness, scrubs and clothing brands.</p>
+    </div>
+    
+    <div class="about-video">
+      <video controls preload="none" playsinline poster="videos/posters/matcha.jpg" src="videos/matcha.mp4"></video>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section contact" id="contact">
+  <h2>Your product could<br>be everywhere.<br>Want to make that happen?</h2>
+  <div class="contact-grid">
+    <div class="contact-left">
+      <p class="sub">Fill in the details and I&#x27;ll reach out!</p>
+      <form onsubmit="handleSubmit(event)">
+        <input type="hidden" name="access_key" value="">
+        <input type="hidden" name="subject" value="New UGC inquiry from your portfolio site">
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="jordan@brand.com" required>
+        </div>
+        <div class="field">
+          <label for="details">What brand are you growing?</label>
+          <textarea id="details" name="message" placeholder="Tell me about the product, timeline, and budget range."></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">Send inquiry →</button>
+        <div class="form-note" id="formNote"></div>
+      </form>
+    </div>
+    <div class="contact-right">
+      <div class="contact-right-label">Here&#x27;s my email if that&#x27;s easier</div>
+      <a class="contact-email-link" href="mailto:jensammonsugc@gmail.com?subject=UGC%20Inquiry">jensammonsugc@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Jen Sammons</span>
+  <span style="display:flex; gap:20px;">
+    <a href="https://www.instagram.com/_jensammons/" target="_blank" rel="noopener">IG @_jensammons</a>
+    
+    <a href="mailto:jensammonsugc@gmail.com">jensammonsugc@gmail.com</a>
+  </span>
+</footer>
+
+<script>
+  // Hero phone: click to straighten, enlarge, and play the video
+  const heroPhone = document.getElementById('heroPhone');
+  const phoneVideo = document.getElementById('phoneVideo');
+  heroPhone.addEventListener('click', () => {
+    const isActive = heroPhone.classList.toggle('active');
+    if (isActive) {
+      phoneVideo.currentTime = 0;
+      const p = phoneVideo.play();
+      if (p && p.catch) p.catch(() => {});
+    } else {
+      phoneVideo.pause();
+    }
+  });
+
+  // Smooth-scroll internal links with an offset for the fixed nav bar
+  // (more reliable across browsers than CSS scroll-padding-top alone)
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const id = link.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      const navHeight = document.querySelector('nav').offsetHeight;
+      const y = Math.round(target.getBoundingClientRect().top + window.pageYOffset - navHeight);
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    });
+  });
+
+  // Reel cards, in the order set in site.json. A card without a video yet shows its poster.
+  const reelCards = [{"tag": "SiteToBuy", "poster": "videos/posters/sitetobuy.jpg", "src": "videos/sitetobuy.mp4"}, {"tag": "Mushroom matcha", "poster": "videos/posters/matcha.jpg", "src": "videos/matcha.mp4"}, {"tag": "Kalshi", "poster": "videos/posters/kalshi.jpg", "src": "videos/kalshi.mp4"}];
+
+  function cardHTML(c) {
+    const media = c.src
+      ? `<video controls preload="none" playsinline poster="${c.poster}" src="${c.src}"></video>`
+      : `<img src="${c.poster}" alt="">`;
+    return `<div class="reel-card"><span class="reel-tag-badge">${c.tag}</span>${media}</div>`;
+  }
+
+  const reel = document.getElementById('reel');
+  // Triple the set so prev/next always has a card to land on in either direction
+  reel.innerHTML = reelCards.map(cardHTML).join('') + reelCards.map(cardHTML).join('') + reelCards.map(cardHTML).join('');
+
+  const N = reelCards.length;
+  const step = reel.children[1].offsetLeft - reel.children[0].offsetLeft;
+  let index = N; // start at the first card of the middle copy
+
+  function positionInstant(i) {
+    reel.style.scrollBehavior = 'auto';
+    reel.scrollLeft = i * step;
+    void reel.offsetHeight; // force reflow before re-enabling smooth
+    reel.style.scrollBehavior = 'smooth';
+  }
+  positionInstant(index);
+
+  function afterSettle() {
+    if (index < N) { index += N; positionInstant(index); }
+    else if (index >= N * 2) { index -= N; positionInstant(index); }
+  }
+
+  let settleTimer;
+  function scheduleSettle() {
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(afterSettle, 420);
+  }
+
+  function goTo(i) {
+    index = i;
+    reel.scrollTo({ left: index * step, behavior: 'smooth' });
+    scheduleSettle();
+  }
+
+  document.getElementById('reelNext').addEventListener('click', () => goTo(index + 1));
+  document.getElementById('reelPrev').addEventListener('click', () => goTo(index - 1));
+
+  // Web3Forms submit handler. With no access key yet, the form opens a pre-filled email instead.
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById('submitBtn');
+    const note = document.getElementById('formNote');
+    const data = Object.fromEntries(new FormData(form));
+
+    if (!data.access_key) {
+      const body = encodeURIComponent(`From: ${data.email}\n\n${data.message || ''}`);
+      window.location.href = `mailto:jensammonsugc@gmail.com?subject=${encodeURIComponent(data.subject)}&body=${body}`;
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+
+      if (result.success) {
+        btn.textContent = "Sent ✓";
+        note.textContent = "Got it. I&#x27;ll reply same day.";
+        form.reset();
+      } else {
+        throw new Error(result.message || "Something went wrong");
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = "Send inquiry →";
+      note.textContent = "Something went wrong sending that. Try again, or email jensammonsugc@gmail.com directly.";
+    }
+  }
+</script>
+
+</body>
+</html>
